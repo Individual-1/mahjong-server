@@ -25,9 +25,15 @@ Alternative:
 
 server endpoints:
 
-POST /draw {rID=roomID} - returns next tile from the wall, server modifies wallIndex
+Room related, maybe group?
 POST /join {rID=roomID, pw=password} - adds room to user's token and tell them to refresh
+POST /leave {rID=roomID} - leave room and remove from all user's db entries and token
 POST /create {pw=password} - creates a room and ID, returns id and adds it to creator's token
+
+Tile/game related
+POST /discard {tile=tileCode} - discard a given tile on your turn, reject if not your turn or you dont have that tile
+POST /take - take the last discarded tile if conditions are met, reject if not
+POST /draw {rID=roomID} - returns next tile from the wall, server modifies wallIndex
 
 Schema:
 
@@ -49,3 +55,7 @@ users -
             tiles - 18 bytes, each bit represents a tile in user's hand for a given room
             wind - 1-4, north, west, south, east
             score - current score
+
+cloud function stuff
+* https://cloud.google.com/functions/docs/first-go
+* https://cloud.google.com/functions/docs/securing/managing-access-iam#allowing_unauthenticated_function_invocation
