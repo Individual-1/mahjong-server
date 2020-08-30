@@ -12,24 +12,30 @@ import (
 
 // User is a struct for a given userID
 type User struct {
-	name  string              // name
-	rooms map[string]UserRoom // $roomId: UserRoom
+	Name  string              `json:"name"`
+	Rooms map[string]UserRoom `json:"rooms"`
 }
 
 // UserRoom is a struct for roomID within a user object
 type UserRoom struct {
-	score int    // score
-	tiles []byte // tiles
-	wind  int    // wind
+	Score int `json:"score"`
 }
 
 // Room is a struct representing a single game
 type Room struct {
-	discard   map[int][]byte  // discard
-	pw        string          // pw
-	users     map[string]bool // users
-	wall      []byte          // wall
-	wallIndex int             //wallIndex
+	Discard   RoomTiles         `json:"discard"`
+	Hands     RoomTiles         `json:"hands"`
+	Pw        string            `json:"pw"`
+	Users     map[string]string `json:"users"`
+	Wall      []byte            `json:"wall"`
+	WallIndex int               `json:"wallIndex"`
+}
+
+type RoomTiles struct {
+	North []byte `json:"north"`
+	West  []byte `json:"west"`
+	South []byte `json:"south"`
+	East  []byte `json:"east"`
 }
 
 var app *firebase.App
@@ -58,5 +64,3 @@ func main() {
 func joinRoom(roomId string) {
 	dbClient.NewRef()
 }
-
-func keepAlive

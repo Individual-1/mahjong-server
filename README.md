@@ -40,26 +40,29 @@ Schema:
 rooms - 
     $rID -
         users -
-            $uid1 - true
-            $uid2 - true
-            $uid3 - true
-            $uid4 - true
+            $uid1 - wind (as string)
+            $uid2 - wind
+            $uid3 - wind
+            $uid4 - wind
         round - round number
         wall - byte array of tiles
         wallIndex - current index to pull from
         pw - password for the room
         discard - 
-            1 - north, byte array with tiles
-            2 - west, same as north
-            3 - south, same as north
-            4 - east, same as north
+            north - byte array with tiles
+            west - same as north
+            south - same as north
+            east - same as north
+        hands -
+            north - byte array with tiles
+            west - byte array with tiles
+            south - byte array with tiles
+            east - byte array with tiles
 users -
     $uid -
         name - name
         rooms -
             $rID -
-                tiles - byte array, ordered tiling?
-                wind - 1-4, north, west, south, east
                 score - current score
 
 cloud function stuff
@@ -68,5 +71,6 @@ cloud function stuff
 
 Misc questions
 * How do we handle someone leaving a room, do we kil the room for everyone?
-* How do we detect a disconnect?    
-    * keepalive pings?
+    * Pause game until player requirements met, user can rejoin?
+* How do we detect a disconnect?
+    * keepalive pings? -> user doesnt check in for X minutes then other users in a room get option to remove player

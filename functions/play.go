@@ -4,28 +4,6 @@ import (
 	"net/http"
 )
 
-// User is a struct for a given userID
-type User struct {
-	name  string              // name
-	rooms map[string]UserRoom // $roomId: UserRoom
-}
-
-// UserRoom is a struct for roomID within a user object
-type UserRoom struct {
-	score int    // score
-	tiles []byte // tiles
-	wind  int    // wind
-}
-
-// Room is a struct representing a single game
-type Room struct {
-	discard   map[int][]byte  // discard
-	pw        string          // pw
-	users     map[string]bool // users
-	wall      []byte          // wall
-	wallIndex int             //wallIndex
-}
-
 func HandleRoom(w http.ResponseWriter, r *http.Request) {
 
 }
