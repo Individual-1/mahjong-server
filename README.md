@@ -39,23 +39,34 @@ Schema:
 
 rooms - 
     $rID -
+        users -
+            $uid1 - true
+            $uid2 - true
+            $uid3 - true
+            $uid4 - true
         round - round number
-        wall - ?? bytes, vector or array of tiles
+        wall - byte array of tiles
         wallIndex - current index to pull from
         pw - password for the room
         discard - 
-            1 - north, 18 bytes with each bit representing whether a given tile is in this discard pile
+            1 - north, byte array with tiles
             2 - west, same as north
             3 - south, same as north
             4 - east, same as north
 users -
     $uid -
         name - name
-        $rID -
-            tiles - 18 bytes, each bit represents a tile in user's hand for a given room
-            wind - 1-4, north, west, south, east
-            score - current score
+        rooms -
+            $rID -
+                tiles - byte array, ordered tiling?
+                wind - 1-4, north, west, south, east
+                score - current score
 
 cloud function stuff
 * https://cloud.google.com/functions/docs/first-go
 * https://cloud.google.com/functions/docs/securing/managing-access-iam#allowing_unauthenticated_function_invocation
+
+Misc questions
+* How do we handle someone leaving a room, do we kil the room for everyone?
+* How do we detect a disconnect?    
+    * keepalive pings?
