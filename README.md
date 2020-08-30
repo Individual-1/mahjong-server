@@ -1,7 +1,51 @@
-* ***Appengine standard + scale to zero
+* Appengine standard + scale to zero
 * No websockets so have to use keepalives + reading responses from user
 * How do we identify users? Should we use some sorta signed requests?
 * Should we just not bother identifying users at all?
+    - firebase auth?
 * https://cloud.google.com/appengine/docs/standard/go/how-requests-are-handled
 * https://cloud.google.com/appengine/docs/standard/python/how-instances-are-managed#instance_states
 * https://cloud.google.com/appengine/docs/standard/go/go-differences#migrating-appengine-sdk
+* firebase anonymous authentication userid
+* https://cloud.google.com/identity-platform/docs/web/app-engine
+* identity platform instead of firebase auth
+
+FCM
+* https://medium.com/@rody.davis.jr/how-to-send-push-notifications-on-flutter-web-fcm-b3e64f1e2b76
+* On registration have clients generate an FCM id and send it to server
+* Server associates firebase auth id, FCM id, and a room
+* On each FCM addition to a room, update the group notify for that
+* 
+
+Alternative:
+* Use Firebase realtime database to have clients pull directly from that
+* Anonymous auth to register with a room in the service and then get put onto an allow list for a given room name in db
+* https://firebase.google.com/docs/database/security/rules-conditions#structuring_your_database_to_support_authentication_conditions
+* https://firebase.google.com/docs/auth/admin/custom-claims#set_and_validate_custom_user_claims_via_the_admin_sdk to set the room name as a claim id
+
+server endpoints:
+
+POST /draw {rID=roomID} - returns next tile from the wall, server modifies wallIndex
+POST /join {rID=roomID, pw=password} - adds room to user's token and tell them to refresh
+POST /create {pw=password} - creates a room and ID, returns id and adds it to creator's token
+
+Schema:
+
+rooms - 
+    $rID -
+        round - round number
+        wall - ?? bytes, vector or array of tiles
+        wallIndex - current index to pull from
+        pw - password for the room
+        discard - 
+            1 - north, 18 bytes with each bit representing whether a given tile is in this discard pile
+            2 - west, same as north
+            3 - south, same as north
+            4 - east, same as north
+users -
+    $uid -
+        name - name
+        $rID -
+            tiles - 18 bytes, each bit represents a tile in user's hand for a given room
+            wind - 1-4, north, west, south, east
+            score - current score
