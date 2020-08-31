@@ -23,6 +23,7 @@ type UserRoom struct {
 
 // Room is a struct representing a single game
 type Room struct {
+	Turn      string            `json:"turn"`
 	Discard   RoomTiles         `json:"discard"`
 	Hands     RoomTiles         `json:"hands"`
 	Pw        string            `json:"pw"`
@@ -55,12 +56,12 @@ func main() {
 	}
 	fmt.Println(authClient.VerifyIDToken("asda"))
 
-	dbClient, err = app.Database()
-	if err != nil {
-		log.Fatalf("Error establishing db connection: %v\n", err)
-	}
 }
 
-func joinRoom(roomId string) {
-	dbClient.NewRef()
+func joinRoom(roomID string) {
+
+}
+
+func draw(roomID string, userID string) {
+	// Use db transactions to make sure we only update this once
 }

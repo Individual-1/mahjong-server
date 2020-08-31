@@ -22,6 +22,8 @@ Alternative:
 * Anonymous auth to register with a room in the service and then get put onto an allow list for a given room name in db
 * https://firebase.google.com/docs/database/security/rules-conditions#structuring_your_database_to_support_authentication_conditions
 * https://firebase.google.com/docs/auth/admin/custom-claims#set_and_validate_custom_user_claims_via_the_admin_sdk to set the room name as a claim id
+* https://firebase.google.com/docs/database/admin/save-data#go_9
+* Use firestore, not realtime database
 
 server endpoints:
 
@@ -48,6 +50,7 @@ rooms -
         wall - byte array of tiles
         wallIndex - current index to pull from
         pw - password for the room
+        turn - which wind's turn it is
         discard - 
             north - byte array with tiles
             west - same as north
