@@ -130,12 +130,12 @@ func draw(roomID string, userID string) error {
 
 		tx.Update(roomDoc, []firestore.Update{
 			{Path: "wallIndex", Value: room.WallIndex + 1},
-			{Path: "hands", Value: room.Hands},
+			{Path: fmt.Sprintf("hands.%s", wind), Value: room.Hands[wind]},
 		})
 	})
 }
 
-func discard(roomID string, userID string, tileID int) error {
+func discard(roomID string, userID string, tileID byte) error {
 	var err error
 	// TODO: validate userID and roomID
 
@@ -170,22 +170,28 @@ func discard(roomID string, userID string, tileID int) error {
 				Type: OperationError}
 		}
 
-		// Check if user has tile in their hand
-		if !bytes.Contains(room.Hands[userID], []byte(tileID)) {
-			return MahjongError{Name: fmt.Sprintf("Room %s is out of Wall tiles", roomID), Type: WashOutError}
+		// Get the index of the tile we want to discard
+		index := bytes.IndexByte(room.Hands[userID], tileID)
+
+		if index == -1 {
+			return MahjongError{Name: fmt.Sprintf("User %s in room %s does not have tile %i", userID, roomID, tileID),
+				Type: OperationError}
 		}
 
-		// We meet all pre-reqs, draw a tile and add it to user's hand, then increment
-		if room.Hands[wind] == nil {
-			room.Hands[wind] = make([]byte, 20)
+		// Remove tile from user's hand
+		if index == 0 {
+			room.Hands[wind] = room.Hands[wind][1:]
+		} else if index != len(room.Hands[wind])-1 {
+			room.Hands[wind] = append(room.Hands[wind][:index], room.Hands[wind][index+1:]...)
+		} else {
+			room.Hands[wind] = room.Hands[wind][:len(room.Hands[wind])-1]
 		}
 
-		// Append tile to user's hand
-		room.Hands[wind] = append(room.Hands[wind], room.Wall[room.WallIndex])
+		room.Discard[wind] = append(room.Discard[wind], tileID)
 
 		tx.Update(roomDoc, []firestore.Update{
-			{Path: "wallIndex", Value: room.WallIndex + 1},
-			{Path: "hands", Value: room.Hands},
+			{Path: fmt.Sprintf("discard.%s", wind), Value: room.Discard[wind]},
+			{Path: fmt.Sprintf("hands.%s", wind), Value: room.Hands[wind]},
 		})
 	})
 }
