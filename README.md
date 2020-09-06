@@ -77,3 +77,5 @@ Misc questions
     * Pause game until player requirements met, user can rejoin?
 * How do we detect a disconnect?
     * keepalive pings? -> user doesnt check in for X minutes then other users in a room get option to remove player
+* Should we worry about hand ordering?
+    * Just do it client-side and sanity check the discards on the server side

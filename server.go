@@ -10,45 +10,9 @@ import (
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
+
+	. "github.com/Individual-1/mahjong-server/defs"
 )
-
-// User is a struct for a given userID
-type User struct {
-	Name  string              `firestore:"name"`
-	Rooms map[string]UserRoom `firestore:"rooms"`
-}
-
-// UserRoom is a struct for roomID within a user object
-type UserRoom struct {
-	Score int `firestore:"score"`
-}
-
-// Room is a struct representing a single game
-type Room struct {
-	Turn      string            `firestore:"turn"`
-	Discard   map[string][]byte `firestore:"discard"`
-	Hands     map[string][]byte `firestore:"hands"`
-	Pw        string            `firestore:"pw"`
-	Users     map[string]string `firestore:"users"`
-	Wall      []byte            `firestore:"wall"`
-	WallIndex int               `firestore:"wallIndex"`
-}
-
-type ErrorType int
-
-const (
-	OperationError ErrorType = 1 // Any error from library or other calls
-	WashOutError   ErrorType = 5 // Wall is exhausted
-)
-
-type MahjongError struct {
-	Name string
-	Type ErrorType
-}
-
-func (e MahjongError) Error() string {
-	return e.Name
-}
 
 var app *firebase.App
 var ctx context.Context
@@ -194,4 +158,9 @@ func discard(roomID string, userID string, tileID byte) error {
 			{Path: fmt.Sprintf("hands.%s", wind), Value: room.Hands[wind]},
 		})
 	})
+}
+
+// Claim a tile, puts your name in to pool and the person who claimed first with the highest priority gets it
+func claim(roomID string, userID string, tileID byte) error {
+
 }
