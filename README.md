@@ -25,6 +25,13 @@ Alternative:
 * https://firebase.google.com/docs/database/admin/save-data#go_9
 * Use firestore, not realtime database
 
+v3:
+* Use Cloud Firestore for DB
+* Use FCM to notify groups of users of current game state
+* One game per user at a time?
+* Store game id in the auth token
+* Validate game membership with attempts to change the game state, if invalid then invalidate user's token
+
 server endpoints:
 
 Room related, maybe group?
